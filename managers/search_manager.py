@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from PIL import Image
 
-from ui_elements.image_manager import ImageManager
+from .image_manager import ImageManager
 
 
 class Anime(TypedDict):
@@ -30,9 +30,6 @@ age_colors = {
 
 class SearchManager:
     
-    headers : dict = { 'Accept-Language' : 'en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7',
-                'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 OPR/105.0.0.0'}
-    link    : str  = "https://animefire.plus/pesquisar/"
     
     
     def search_animes(self, query : str, dub : bool) -> list[Anime]:
@@ -48,12 +45,17 @@ class SearchManager:
 
             """
         
+        headers : dict  =  { 'Accept-Language' : 'en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7',
+                'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 OPR/105.0.0.0'}
+        link    : str   =  "https://animefire.plus/pesquisar/"
+        query   : str   =  "-".join(query.lower().split())
+        url     : str   =  link+query
+        print(url)
         
-        query : str = "-".join(query.lower().split())
-         
+        
         if get_connection():
             
-            response = requests.get(f"{self.link}{query}", headers = self.headers).content 
+            response = requests.get(url, headers = headers).content 
             soup = BeautifulSoup(response, 'html.parser')
             
             animes : list[BeautifulSoup] = soup.find_all('article', class_ = "card cardUltimosEps")

@@ -5,7 +5,7 @@ from threading import Thread
 import requests
 from yt_dlp import YoutubeDL
 
-from search_manager import SearchManager, get_connection
+from .search_manager import get_connection
 
 
 def terminate(self) -> None: 
